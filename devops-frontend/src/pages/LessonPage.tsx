@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CheckCircle, Clock, ExternalLink } from 'lucide-react'

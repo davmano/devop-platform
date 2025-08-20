@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { Clock, User, Star } from 'lucide-react'
 import { Course } from '../types'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Clock, User, BookOpen, Play, CheckCircle } from 'lucide-react'
