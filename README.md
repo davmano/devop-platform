@@ -78,44 +78,6 @@ Once the backend is running, visit:
 - `GET /api/progress/{course_id}` - Get user progress
 - `POST /api/progress/{course_id}` - Update user progress
 
-## 🐳 DevOps Implementation
-
-This repository includes a comprehensive **DevOps Implementation Guide** (`DevOps-Implementation-Guide.md` and `.pdf`) that provides step-by-step instructions for implementing:
-
-- **Docker & Docker Compose** - Containerization and local orchestration
-- **Kubernetes** - Production-ready container orchestration
-- **CI/CD Pipelines** - GitHub Actions and GitLab CI configurations
-- **Monitoring & Observability** - Prometheus, Grafana, and ELK stack
-- **GitOps** - ArgoCD for automated deployments
-- **Ingress Controllers** - NGINX with SSL/TLS termination
-- **Security Best Practices** - RBAC, network policies, and secrets management
-
-## 📁 Project Structure
-
-```
-devops-learning-app/
-├── devops-backend/           # FastAPI backend application
-│   ├── app/
-│   │   ├── main.py          # FastAPI application entry point
-│   │   ├── models.py        # Data models (Course, Lesson, Progress)
-│   │   └── data.py          # Sample course data
-│   ├── pyproject.toml       # Python dependencies and project config
-│   └── README.md            # Backend-specific documentation
-├── devops-frontend/         # React TypeScript frontend
-│   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   ├── pages/           # Page components (Home, Course, Lesson)
-│   │   ├── services/        # API service layer
-│   │   ├── types/           # TypeScript type definitions
-│   │   └── App.tsx          # Main application component
-│   ├── package.json         # Node.js dependencies
-│   ├── tailwind.config.js   # Tailwind CSS configuration
-│   └── vite.config.ts       # Vite build configuration
-├── DevOps-Implementation-Guide.md  # Comprehensive DevOps guide
-├── DevOps-Implementation-Guide.pdf # PDF version of the guide
-└── README.md                # This file
-```
-
 ## 🔧 Development
 
 ### Backend Development
@@ -153,28 +115,6 @@ poetry run flake8 app/
 cd devops-frontend
 npm run lint
 ```
-
-## 🚀 Deployment
-
-### Docker Deployment
-```bash
-# Build and run with Docker Compose
-docker-compose up --build -d
-```
-
-### Kubernetes Deployment
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f k8s/
-```
-
-### Production Deployment
-Follow the comprehensive DevOps Implementation Guide for production-ready deployment with:
-- Container orchestration
-- CI/CD automation
-- Monitoring and logging
-- Security hardening
-- Load balancing and scaling
 
 ## 🤝 Contributing
 
