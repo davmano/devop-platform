@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../manifests/namespace.yaml
+- ../../manifests/configmap.yaml
+- ../../manifests/backend-deployment.yaml
+- ../../manifests/frontend-deployment.yaml
+- ../../manifests/services.yaml
+- ../../manifests/hpa.yaml
+- ../../manifests/ingress.yaml
+- ../../manifests/network-policy.yaml
+- ../../manifests/rbac.yaml
+- ../../manifests/pod-disruption-budget.yaml
+- ../../manifests/service-monitor.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: devops-learning-platform
+  app.kubernetes.io/managed-by: kustomize
+
+images:
+- name: devops-backend
+  newTag: latest
+- name: devops-frontend
+  newTag: latest

@@ -1,0 +1,87 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-learning-platform
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: devops-learning-platform
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/davmano/devops-learning-app
+    targetRevision: main
+    path: devops/k8s/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devops-learning-platform
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 10
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  info:
+  - name: 'Description'
+    value: 'DevOps Learning Platform - Production Deployment'
+  - name: 'Owner'
+    value: 'DevOps Team'
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devops-learning-platform-staging
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: devops-learning-platform
+    app.kubernetes.io/environment: staging
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/davmano/devops-learning-app
+    targetRevision: develop
+    path: devops/k8s/manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devops-learning-platform-staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  revisionHistoryLimit: 10
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  info:
+  - name: 'Description'
+    value: 'DevOps Learning Platform - Staging Deployment'
+  - name: 'Owner'
+    value: 'DevOps Team'

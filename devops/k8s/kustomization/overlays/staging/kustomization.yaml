@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: devops-learning-platform-staging
+
+resources:
+- ../../base
+
+patchesStrategicMerge:
+- staging-patches.yaml
+
+commonLabels:
+  environment: staging
+
+images:
+- name: devops-backend
+  newTag: staging
+- name: devops-frontend
+  newTag: staging

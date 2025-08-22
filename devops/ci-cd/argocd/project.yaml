@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: devops-learning-platform
+  namespace: argocd
+spec:
+  description: DevOps Learning Platform Project
+  sourceRepos:
+  - 'https://github.com/davmano/devops-learning-app'
+  destinations:
+  - namespace: 'devops-learning-platform*'
+    server: https://kubernetes.default.svc
+  - namespace: 'monitoring'
+    server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: 'networking.k8s.io'
+    kind: NetworkPolicy
+  - group: 'rbac.authorization.k8s.io'
+    kind: ClusterRole
+  - group: 'rbac.authorization.k8s.io'
+    kind: ClusterRoleBinding
+  namespaceResourceWhitelist:
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: Service
+  - group: ''
+    kind: ServiceAccount
+  - group: 'apps'
+    kind: Deployment
+  - group: 'apps'
+    kind: ReplicaSet
+  - group: 'autoscaling'
+    kind: HorizontalPodAutoscaler
+  - group: 'networking.k8s.io'
+    kind: Ingress
+  - group: 'networking.k8s.io'
+    kind: NetworkPolicy
+  roles:
+  - name: admin
+    description: Admin privileges to devops-learning-platform project
+    policies:
+    - p, proj:devops-learning-platform:admin, applications, *, devops-learning-platform/*, allow
+    - p, proj:devops-learning-platform:admin, logs, get, devops-learning-platform/*, allow
+    - p, proj:devops-learning-platform:admin, exec, create, devops-learning-platform/*, allow
+    groups:
+    - devops-team
+  - name: readonly
+    description: Read-only privileges to devops-learning-platform project
+    policies:
+    - p, proj:devops-learning-platform:readonly, applications, get, devops-learning-platform/*, allow
+    - p, proj:devops-learning-platform:readonly, logs, get, devops-learning-platform/*, allow
+    groups:
+    - developers

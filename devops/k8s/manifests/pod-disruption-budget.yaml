@@ -1,0 +1,24 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: devops-backend-pdb
+  namespace: devops-learning-platform
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devops-backend
+      app.kubernetes.io/instance: production
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: devops-frontend-pdb
+  namespace: devops-learning-platform
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devops-frontend
+      app.kubernetes.io/instance: production

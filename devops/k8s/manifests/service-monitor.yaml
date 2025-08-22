@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devops-learning-platform-monitor
+  namespace: devops-learning-platform
+  labels:
+    app.kubernetes.io/name: devops-learning-platform
+    app.kubernetes.io/component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devops-backend
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+  - port: http
+    interval: 30s
+    path: /metrics
+  namespaceSelector:
+    matchNames:
+    - devops-learning-platform

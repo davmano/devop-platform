@@ -1,0 +1,43 @@
+1. Get the application URL by running these commands:
+{{- if .Values.ingress.enabled }}
+{{- range $host := .Values.ingress.hosts }}
+  {{- range .paths }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+  {{- end }}
+{{- end }}
+{{- else if contains "NodePort" .Values.service.frontend.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "devops-learning-platform.fullname" . }}-frontend)
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.frontend.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "devops-learning-platform.fullname" . }}-frontend'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "devops-learning-platform.fullname" . }}-frontend --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.frontend.port }}
+{{- else if contains "ClusterIP" .Values.service.frontend.type }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "devops-learning-platform.name" . }},app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=frontend" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+{{- end }}
+
+2. Check the status of your deployment:
+   kubectl get pods -n {{ .Release.Namespace }}
+   kubectl get services -n {{ .Release.Namespace }}
+   kubectl get ingress -n {{ .Release.Namespace }}
+
+3. View application logs:
+   kubectl logs -f deployment/{{ include "devops-learning-platform.fullname" . }}-backend -n {{ .Release.Namespace }}
+   kubectl logs -f deployment/{{ include "devops-learning-platform.fullname" . }}-frontend -n {{ .Release.Namespace }}
+
+4. Scale your deployment:
+   kubectl scale deployment {{ include "devops-learning-platform.fullname" . }}-backend --replicas=5 -n {{ .Release.Namespace }}
+   kubectl scale deployment {{ include "devops-learning-platform.fullname" . }}-frontend --replicas=3 -n {{ .Release.Namespace }}
+
+5. Monitor with Prometheus (if monitoring is enabled):
+   kubectl port-forward svc/prometheus-server 9090:80 -n monitoring
+   Open http://localhost:9090 in your browser
+
+6. View Grafana dashboards (if monitoring is enabled):
+   kubectl port-forward svc/grafana 3000:80 -n monitoring
+   Open http://localhost:3000 in your browser (admin/admin)

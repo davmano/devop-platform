@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devops-learning-platform.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "devops-learning-platform.labels" . | nindent 4 }}
+    app.kubernetes.io/component: config
+data:
+  ENVIRONMENT: {{ .Values.config.backend.environment | quote }}
+  PYTHONUNBUFFERED: {{ .Values.config.backend.pythonUnbuffered | quote }}
+  PYTHONDONTWRITEBYTECODE: {{ .Values.config.backend.pythonDontWriteBytecode | quote }}
+  METRICS_ENABLED: {{ .Values.config.backend.metricsEnabled | quote }}
+  METRICS_PORT: {{ .Values.config.backend.metricsPort | quote }}
+  
+  VITE_API_URL: {{ .Values.config.frontend.apiUrl | quote }}

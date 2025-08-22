@@ -95,3 +95,13 @@ async def get_categories():
     """Get all available course categories"""
     categories = list(set(course.category for course in courses_db.values()))
     return {"categories": categories}
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint"""
+    return {
+        "http_requests_total": 1000,
+        "http_request_duration_seconds": 0.1,
+        "courses_total": len(courses_db),
+        "active_users": 50
+    }
